@@ -1,21 +1,27 @@
+import AuthOptions from "@/app/auth/authOptions"
 import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import Google from "next-auth/providers/google"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import prisma from "@/prisma/client"
-import { adapter } from "next/dist/server/web/adapter"
-const handler = NextAuth({
-  adapter:PrismaAdapter(prisma),
-providers:[
-  Google({
-    clientId: process.env.GOOGLE_CLIENT_ID!,
-    clientSecret:process.env.GOOGLE_CLIENT_SECRET!
-
-  })
-],
-session:{
-  strategy:'jwt'
-}
+import { NextRequest, NextResponse } from "next/server"
+import {z} from 'zod'
+//auth options here 
+const handler = NextAuth(
+  AuthOptions
+)
+const loginValidation = z.object({
+  email : z.string().email(),
+  password : z.string()
 })
 
 export { handler as GET, handler as POST }
+
+async function  POST(res :NextRequest) {
+  const body =await res.json();
+ const validation = await loginValidation.safeParse(body);
+
+ if(!validation.success)
+  return NextResponse.json(validation.error.format , {status: 400})
+
+ 
+  
+
+  return NextResponse.json({m:"login succsess"}, {status:200})
+}

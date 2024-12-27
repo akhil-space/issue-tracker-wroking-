@@ -6,6 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "./NavBar";
 import AuthProvider from "./auth/Provider";
+import QueryClientProvider from "./ReactQueryClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* <Theme>  */}
-        <AuthProvider >        <Theme accentColor="bronze" grayColor="gray" panelBackground="solid" radius="full" scaling="110%">
+
+      <QueryClientProvider> 
+        <AuthProvider >  
+          <Theme accentColor="bronze" grayColor="gray" panelBackground="solid" radius="full" scaling="110%">
         <NavBar />
         <main className="p-5">
           <Container > 
@@ -44,7 +48,7 @@ export default function RootLayout({
         {/* <ThemePanel/> */}
         </Theme>
         </AuthProvider>
-
+        </QueryClientProvider>
       </body>
     </html>
   );

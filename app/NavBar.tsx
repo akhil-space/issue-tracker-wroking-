@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import { AiFillBug } from 'react-icons/ai'
+import classnames from "classnames"
+import Skeleton from './components/Skeleton';
 
 
 
@@ -33,13 +35,16 @@ export default NavBar
 const AuthComponent = () => {
     const { status, data: session } = useSession();
 
+if(status === "loading") return <Skeleton width={"3rem"}/>
+
+if(status === "unauthenticated")
+    return  <Box><Link  className = "nav-link" href={"/api/auth/signin"}>Log in</Link></Box>
+
     return (
         <Box>
-            {
-                status === 'authenticated' && (
-                    <DropdownMenu.Root>
+            <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
-                            <Avatar src={session.user!.image!}
+                            <Avatar src={session!.user!.image!}
                                 fallback="?"
                                 size={"2"}
                                 radius='full'
@@ -47,7 +52,7 @@ const AuthComponent = () => {
                             />
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
-                            <DropdownMenu.Label><Text>{session.user!.email}</Text>
+                            <DropdownMenu.Label><Text>{session!.user!.email}</Text>
                             </DropdownMenu.Label>
                             <DropdownMenu.Item>
                                 <Button><Link href={"/api/auth/signout"}>Log out</Link></Button>
@@ -55,17 +60,7 @@ const AuthComponent = () => {
                         </DropdownMenu.Content>
 
                     </DropdownMenu.Root>
-
-
-
-                )
-
-            }
-            {
-                status === "unauthenticated" && <Link href={"/api/auth/signin"}>Log in</Link>
-            }
-
-        </Box>
+       </Box>
     )
 }
 
@@ -76,7 +71,7 @@ const NavLinks = () => {
             label: 'Dashboard', href: '/'
         },
         {
-            label: 'Issue', href: '/issues'
+            label: 'Issue', href: '/issues/list'
         }
     ]
     return (
@@ -85,7 +80,16 @@ const NavLinks = () => {
             {links.map(link =>
                 <li key={link.href}>  <Link
                     href={link.href} 
-                    className={`${link.href === currentPath ? `text-zinc-900` : `text-zinc-500`} hover:text-zinc-800 transition-colors`}>
+                    className={
+                        classnames({
+                            
+                                "nav-link " : true,
+                                 "!text-zinc-900" :link.href === currentPath 
+                                 
+                        })
+                    }>
+
+
                     {link.label}</Link> </li>)}
         </ul>
     )

@@ -13,5 +13,5 @@ pnpm dev
 bun dev
 ```
 
-
+ "@radix-ui/themes": "^1.1.2",
 Start working in project 

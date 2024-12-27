@@ -59,7 +59,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           if (issue) await axios.patch(`/api/issues/${issue.id}`, data)
           else await axios.post('/api/issues', data);
           setSubmitting(true);
-          router.push('/issues')
+          router.push('/issues/list')
         } catch (error) {
           console.log(error);
           setError('Form cannot be empty');
@@ -67,9 +67,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
 
       })}>
-        <TextField.Root>
+        <TextField.Root defaultValue={issue?.title} placeholder='Title' {...register('title')}>
 
-          <TextField.Input defaultValue={issue?.title} placeholder='Title' {...register('title')} />
+          {/* <TextField.Input defaultValue={issue?.title} placeholder='Title' {...register('title')} /> */}
 
         </TextField.Root>
         {<ErrorMessage>{errors.title?.message}</ErrorMessage>}
