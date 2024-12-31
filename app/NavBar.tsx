@@ -34,6 +34,7 @@ export default NavBar
 
 const AuthComponent = () => {
     const { status, data: session } = useSession();
+console.log( "Auth Component :", session);
 
 if(status === "loading") return <Skeleton width={"3rem"}/>
 
@@ -42,6 +43,7 @@ if(status === "unauthenticated")
 
     return (
         <Box>
+            {session!.user!.email}
             <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
                             <Avatar src={session!.user!.image!}
